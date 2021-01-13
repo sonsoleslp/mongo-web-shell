@@ -11,7 +11,7 @@ server.register(require('fastify-static'), {
   root: path.join(__dirname, '/build'),
 })
 
-server.get('/api/v1/check', (request, reply) => {
+server.get('/api/v1/check', async (request, reply) => {
   return reply.send({ status: 'ok' });
 })
 
@@ -24,7 +24,7 @@ server.post('/api/v1/execute', async (req, reply) => {
   return reply.send({ data });
 })
 
-server.get('/', function (req, reply) {
+server.get('/', async (req, reply) => {
   return reply.sendFile('index.html');
 })
 

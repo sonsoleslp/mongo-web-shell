@@ -6,7 +6,7 @@ import "ace-builds/src-noconflict/theme-monokai";
 
 class App extends Component {
   state = {
-    uri: '',
+    uri: 'mongodb+srv://<user>:<pass>@cluster0.vlgea.mongodb.net/<dbname>',
     script: '',
     output: '',
   };
@@ -38,10 +38,10 @@ class App extends Component {
       }),
     });
     const data = await response.json();
-
+    console.log(data)
+    const output = data.message || JSON.stringify(data);
     this.setState(prev => ({
-      ...prev,
-      output: JSON.stringify(data),
+      ...prev, output, fail: (data.statusCode && data.statusCode >= 300)
     }));
   }
 
@@ -49,22 +49,23 @@ class App extends Component {
     return (
       <div className="app" >
         <form onSubmit={this.handleSubmit} >
-          <input
+          <input className="form-control"
             type="text"
             name="uri"
             value={this.state.uri}
             onChange={this.handleURIChange}
-          /><br />
+          />
           <AceEditor
             mode="javascript"
-            theme="monokai"
+            theme="terminal"
             name="script"
+            style={{width: "100%", height: "50vh"}}
             value={this.state.script}
             onChange={this.handleEditorChange}
           />
-          <button>Execute</button>
+          <button className="btn btn-success">Execute</button>
         </form>
-        <p>{this.state.output}</p>
+        <p className={"output" + (this.state.fail ? " failed":"")}>{this.state.output}</p>
       </div>
     );
   }
