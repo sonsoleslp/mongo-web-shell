@@ -10,15 +10,14 @@ const buildQuery = async (uri, script) => {
     console.log(script)
     const listing = `(async () => {
         const connection = await MongoClient.connect('${uri}', { useNewUrlParser: true });
-        var db = connection.db("er_bbdd");
-        var a = db.collection('sample_airbnb');
-        const script = async () => {${script}};
+        const collection = await connection.db("er_bbdd").collection("sample_airbnb");
+        const script = async () => {  ${script} };
         const result = await script();
 
         connection.close();
+        console.log(result)
         return result;
     })`;
-
     return { execute: eval(listing) };
 }
 
